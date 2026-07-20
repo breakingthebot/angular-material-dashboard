@@ -57,3 +57,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Coded custom autocomplete role chips inputs with chip removal and chip additions triggers.
 - Handled MatSnackBar notifications reporting successful updates after simulated saving delay timeouts.
 - Wrote unit specs verifying form validation indicators, custom autocomplete filter calculations, chips changes, and submissions saving notifications.
+
+## [0.7.0] - 2026-07-20
+
+### Added
+- Created `AuditService` containing administrative log entries, status severities, and IP telemetry values.
+- Built interactive `AuditComponent` layout rendering connected timeline badge indicators and slide-out details review drawers.
+- Added drop-down filters dynamically pruning items based on selected category types and status levels.
+- Wired text lookups matching query parameters to user, action details, and log ID keys.
+- Wrote unit specs verifying timeline filters, category selects, and drawer activation triggers.
