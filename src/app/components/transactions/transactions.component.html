@@ -1,0 +1,148 @@
+<div class="transactions-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <h1>Transactions</h1>
+    <p>Monitor, query, and filter corporate invoice entries in real-time.</p>
+  </header>
+
+  <!-- Filter Controls Search Bar -->
+  <div class="filter-actions-row">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search Transactions</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search by name, ID, or status..." #input>
+      <mat-icon matPrefix class="search-icon">search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <!-- Interactive Table & Slide Detail Card Grid Layout -->
+  <div class="table-view-split" [ngClass]="{'has-detail-active': selectedTransaction()}">
+    <!-- Left Hand: Table Container -->
+    <div class="table-card-wrapper">
+      <mat-card class="table-card">
+        <mat-card-content class="table-content-container">
+          <table mat-table [dataSource]="dataSource" matSort class="premium-table">
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+              <td mat-cell *matCellDef="let row" class="bold-id">{{ row.id }}</td>
+            </ng-container>
+
+            <!-- Customer Column -->
+            <ng-container matColumnDef="customerName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
+              <td mat-cell *matCellDef="let row">{{ row.customerName }}</td>
+            </ng-container>
+
+            <!-- Date Column -->
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+              <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+            </ng-container>
+
+            <!-- Amount Column -->
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+              <td mat-cell *matCellDef="let row" class="bold-amount">{{ row.amount | currency }}</td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+              <td mat-cell *matCellDef="let row">
+                <span class="status-badge" [ngClass]="{
+                  'status-completed': row.status === 'Completed',
+                  'status-pending': row.status === 'Pending',
+                  'status-failed': row.status === 'Failed'
+                }">
+                  {{ row.status }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
+                <button mat-icon-button color="primary" (click)="selectTransaction(row)" matTooltip="View Detail Sheet">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <!-- Table Rows Mapping -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                class="clickable-row"
+                [ngClass]="{'selected-row': selectedTransaction()?.id === row.id}"
+                (click)="selectTransaction(row)">
+            </tr>
+
+            <!-- Row shown when there is no matching data -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell empty-search-cell" [attr.colspan]="displayedColumns.length">
+                No transactions match search criteria: "{{ input.value }}"
+              </td>
+            </tr>
+          </table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="table-paginator"></mat-paginator>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Right Hand: Detail Inspector Drawer (Only visible if selectedTransaction is set) -->
+    <div class="detail-drawer-wrapper" *ngIf="selectedTransaction()">
+      <mat-card class="detail-card">
+        <mat-card-content>
+          <div class="detail-header">
+            <h3>Invoice Details</h3>
+            <button mat-icon-button (click)="clearSelection()" class="close-drawer-btn">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+          <div class="detail-body">
+            <!-- Invoice ID banner -->
+            <div class="detail-banner">
+              <span class="banner-id">{{ selectedTransaction()?.id }}</span>
+              <span class="status-badge" [ngClass]="{
+                'status-completed': selectedTransaction()?.status === 'Completed',
+                'status-pending': selectedTransaction()?.status === 'Pending',
+                'status-failed': selectedTransaction()?.status === 'Failed'
+              }">
+                {{ selectedTransaction()?.status }}
+              </span>
+            </div>
+
+            <!-- Meta details list -->
+            <div class="detail-meta-list">
+              <div class="meta-item">
+                <div class="meta-label">Customer Name</div>
+                <div class="meta-value">{{ selectedTransaction()?.customerName }}</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-label">Email Address</div>
+                <div class="meta-value" [innerHTML]="selectedTransaction()?.email"></div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-label">Billing Category</div>
+                <div class="meta-value">{{ selectedTransaction()?.category }}</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-label">Transaction Date</div>
+                <div class="meta-value">{{ selectedTransaction()?.date }}</div>
+              </div>
+              
+              <hr class="meta-divider">
+
+              <div class="meta-item total-item">
+                <div class="meta-label">Invoice Amount</div>
+                <div class="meta-value price-text">{{ selectedTransaction()?.amount | currency }}</div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
