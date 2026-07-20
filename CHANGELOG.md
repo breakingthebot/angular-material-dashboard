@@ -30,3 +30,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Built animated skeleton placeholder cards with keyframe shimmers representing loading latency cycles.
 - Added live synchronization action button with visual spinning animations when executing queries.
 - Added unit specs asserting skeleton shimmers fade out and correct metric values resolve on delayed fetches.
+
+## [0.4.0] - 2026-07-20
+
+### Added
+- Implemented `TransactionService` handling transactional invoice records and mock gateway latency.
+- Coded interactive, paginated `TransactionsComponent` utilizing Angular Material's sorting, pagination, and tables.
+- Programmed a custom lookup predicate filter supporting search matchings on Customer Names, IDs, and Status keys.
+- Designed a split responsive drawer card panel slide-animating invoice details when clicking rows.
+- Wrote unit specs verifying table counts, text queries filtration, selection signals, and close buttons triggers.
