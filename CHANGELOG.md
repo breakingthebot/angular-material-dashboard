@@ -66,3 +66,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added drop-down filters dynamically pruning items based on selected category types and status levels.
 - Wired text lookups matching query parameters to user, action details, and log ID keys.
 - Wrote unit specs verifying timeline filters, category selects, and drawer activation triggers.
+
+## [0.8.0] - 2026-07-20
+
+### Added
+- Integrated Router state bindings inside `AuditComponent` reactive flow syncing query parameters dynamically.
+- Programmed deep-linking synchronization inside `TransactionsComponent` supporting persistent table filters and drawer selections.
+- Optimized live search query keystroke parameters with back history replacement flags.
+- Wrote unit specs providing router mock configurations and assertion checks for deep-linking components.
