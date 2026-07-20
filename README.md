@@ -1,59 +1,63 @@
-# MaterialDashboardApp
+# Angular Material Dashboard UI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.27.
+A premium enterprise administration dashboard interface built using Angular 19 and the Angular Material components library. Demonstrates structured layout design featuring stats cards, data tables, reactive chart systems, and stateful input forms.
 
-## Development server
+## Stack
+- **Framework**: Angular 19
+- **Components & Layout**: Angular Material (`@angular/material` and `@angular/cdk`)
+- **Language**: TypeScript (strict mode enabled)
+- **Deployment**: Vercel
 
-To start a local development server, run:
+## Setup
+To set up the project locally:
+1. Clone the repository tree:
+   ```bash
+   git clone https://github.com/breakingthebot/angular-material-dashboard.git
+   ```
+2. Navigate into the project folder:
+   ```bash
+   cd angular-material-dashboard
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
 
+## Environment Variables
+Refer to `.env.example`. No keys or tokens are stored or committed.
+- `API_URL`: Root endpoint for querying mock dashboard dataset metrics.
+- `PORT`: Override port configuration (defaults to `4200`).
+
+## Running Locally
+To launch a local hot-reloading development server:
 ```bash
-ng serve
+npm run start
+```
+Once initialized, open `http://localhost:4200` in your web browser.
+
+To execute the unit spec test suite:
+```bash
+npm run test -- --watch=false
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+To run a production-ready application build compilation:
 ```bash
-ng generate component component-name
+npm run build
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Deployed
+The live application is hosted at:
+[https://angular-material-dashboard-blue.vercel.app](https://angular-material-dashboard-blue.vercel.app)
 
-```bash
-ng generate --help
-```
+## Architecture Notes
+- **Modular Core**: Follows modular architecture separating dashboard pages, layout wrappers, widget components, and telemetry services.
+- **Angular Material Foundations**: Inherits standard Indigo-Pink Material UI guidelines using robust CDK layers for dialogs, tables, and overlays.
+- **Strict Typing Rules**: Enforces strict TypeScript parameter validations across all components.
 
-## Building
+## Data Handling
+- **Data Posture**: This is a client-only dashboard. It stores nothing on third-party servers. All settings and parameters are processed in-memory.
+- **Permissions**: Requires no special system permission scopes or OAuth credentials.
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Notes
+- Built using Angular 19 standalone component paradigms without legacy NgModules.
+- Designed with responsive grid flex systems scaling cleanly from phone viewport dimensions to widescreen monitors.
