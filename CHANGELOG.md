@@ -48,3 +48,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Integrated legend visibility toggle checkboxes dynamically rendering polyline path indicators.
 - Designed inline SVG overlay tooltip rects displaying coordinate info on nodes hovers.
 - Wrote unit specs verifying grid dimensions calculation, stream checks, hover triggers, and timeline ranges selectors.
+
+## [0.6.0] - 2026-07-20
+
+### Added
+- Created `SettingsService` managing settings state configurations and available roles autocomplete collections.
+- Programmed Reactive Form settings group in `SettingsComponent` containing name, email, chips lists, and slide toggle inputs.
+- Coded custom autocomplete role chips inputs with chip removal and chip additions triggers.
+- Handled MatSnackBar notifications reporting successful updates after simulated saving delay timeouts.
+- Wrote unit specs verifying form validation indicators, custom autocomplete filter calculations, chips changes, and submissions saving notifications.
