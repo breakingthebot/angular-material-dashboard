@@ -39,3 +39,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Programmed a custom lookup predicate filter supporting search matchings on Customer Names, IDs, and Status keys.
 - Designed a split responsive drawer card panel slide-animating invoice details when clicking rows.
 - Wrote unit specs verifying table counts, text queries filtration, selection signals, and close buttons triggers.
+
+## [0.5.0] - 2026-07-20
+
+### Added
+- Built `AnalyticsService` storing timeline datasets mapping Gross Revenue and Operating Expenses points.
+- Coded custom, responsive SVG line plotting logic inside standalone component `AnalyticsComponent`.
+- Integrated legend visibility toggle checkboxes dynamically rendering polyline path indicators.
+- Designed inline SVG overlay tooltip rects displaying coordinate info on nodes hovers.
+- Wrote unit specs verifying grid dimensions calculation, stream checks, hover triggers, and timeline ranges selectors.
