@@ -1,54 +1,44 @@
 /*
  * components/dashboard/dashboard.component.ts
- * Displays overview analytics metrics and status summaries.
+ * Integrates dashboard KPI cards, loading skeleton signals, and layout widgets.
+ * Connects to: services/dashboard.service.ts, dashboard.component.html
  * Created: 2026-07-20
  */
 
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+// Material Imports
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+// Service Imports
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="dashboard-viewport">
-      <div class="page-header">
-        <h1>Overview</h1>
-        <p>Welcome back, Sarah. Here is your operational summary for today.</p>
-      </div>
-      <div class="temp-placeholder-card">
-        <h3>Dashboard Widgets Grid</h3>
-        <p>This section will contain the interactive KPI stats cards and status indicators in the next iteration.</p>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .page-header h1 {
-      font-size: 2.1rem;
-      font-weight: 800;
-      letter-spacing: -0.8px;
-      margin: 0 0 6px 0;
-    }
-    .page-header p {
-      margin: 0;
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-      font-weight: 500;
-    }
-    .temp-placeholder-card {
-      margin-top: 24px;
-      padding: 30px;
-      background-color: var(--bg-secondary);
-      border-radius: 12px;
-      border: 1px dashed var(--border-color);
-      color: var(--text-secondary);
-      text-align: center;
-    }
-    .temp-placeholder-card h3 {
-      color: var(--text-primary);
-      margin: 0 0 8px 0;
-    }
-  `]
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule
+  ],
+  templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {}
+export class DashboardComponent {
+  // Inject the reactive metrics service
+  dashboardService = inject(DashboardService);
+
+  // Expose signals for template binding
+  metrics = this.dashboardService.metrics;
+  isLoading = this.dashboardService.loading;
+
+  refreshDashboard(): void {
+    this.dashboardService.loadMetrics();
+  }
+}
