@@ -74,3 +74,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Programmed deep-linking synchronization inside `TransactionsComponent` supporting persistent table filters and drawer selections.
 - Optimized live search query keystroke parameters with back history replacement flags.
 - Wrote unit specs providing router mock configurations and assertion checks for deep-linking components.
+
+## [0.9.0] - 2026-07-20
+
+### Added
+- Created functional authentication router guard `roleGuard` validating active settings credentials.
+- Attached `roleGuard` authorization rules directly onto `/audit` logs timeline route definitions.
+- Coded dedicated `ForbiddenComponent` (403 card template) reporting access denied statuses and displaying active vs required privileges.
+- Wrote unit specs verifying component mounting, local settings permission calculations, and guard redirect/pass conditions.
