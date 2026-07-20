@@ -1,0 +1,144 @@
+<div class="audit-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <h1>Audit Log</h1>
+    <p>Track administrator actions, security warnings, and automated database backups.</p>
+  </header>
+
+  <!-- Filter & Controls Toolbar -->
+  <div class="controls-toolbar">
+    <!-- Search Bar -->
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search logs...</mat-label>
+      <input matInput [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" placeholder="Search by ID, User, Action...">
+      <mat-icon matSuffix class="search-icon">search</mat-icon>
+    </mat-form-field>
+
+    <!-- Category Dropdown Select -->
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Category</mat-label>
+      <mat-select [ngModel]="selectedCategory()" (ngModelChange)="selectedCategory.set($event)">
+        <mat-option value="All">All Categories</mat-option>
+        <mat-option value="Security">Security</mat-option>
+        <mat-option value="Settings">Settings</mat-option>
+        <mat-option value="Backup">Backup</mat-option>
+        <mat-option value="System">System</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Severity Dropdown Select -->
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Severity</mat-label>
+      <mat-select [ngModel]="selectedSeverity()" (ngModelChange)="selectedSeverity.set($event)">
+        <mat-option value="All">All Severities</mat-option>
+        <mat-option value="Info">Info</mat-option>
+        <mat-option value="Warning">Warning</mat-option>
+        <mat-option value="Critical">Critical</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- Sidenav Split Layout -->
+  <div class="split-viewport">
+    <!-- Left: Timeline Flow List -->
+    <div class="timeline-scroll-area">
+      @if (filteredLogs().length === 0) {
+        <div class="empty-state-card">
+          <mat-icon class="empty-icon">history_toggle_off</mat-icon>
+          <h3>No matching logs found</h3>
+          <p>Try modifying your search text queries or filter selections.</p>
+        </div>
+      } @else {
+        <div class="timeline-wrapper">
+          @for (log of filteredLogs(); track log.id; let last = $last) {
+            <div class="timeline-item">
+              <!-- Timeline Connection Badge Column -->
+              <div class="badge-column">
+                <div class="badge-icon-box" [ngClass]="'status-' + log.status.toLowerCase()">
+                  <mat-icon>{{ getIconForCategory(log.category) }}</mat-icon>
+                </div>
+                <div class="connection-line" *ngIf="!last"></div>
+              </div>
+
+              <!-- Timeline Card Component -->
+              <div class="log-item-card" 
+                   matRipple
+                   [ngClass]="{'active-log-card': selectedLog()?.id === log.id && drawerOpen()}"
+                   (click)="selectLog(log)">
+                <div class="log-card-header">
+                  <div class="card-tags-row">
+                    <span class="category-badge" [ngClass]="log.category.toLowerCase()">{{ log.category }}</span>
+                    <span class="severity-dot-tag" [ngClass]="'dot-' + log.status.toLowerCase()">
+                      <span class="pulse-dot" *ngIf="log.status === 'Critical'"></span>
+                      {{ log.status }}
+                    </span>
+                  </div>
+                  <span class="log-time">{{ log.timestamp }}</span>
+                </div>
+                <h3 class="log-action">{{ log.action }}</h3>
+                <div class="log-card-footer">
+                  <span class="log-user">
+                    <mat-icon>person</mat-icon>
+                    {{ log.user }}
+                  </span>
+                  <span class="log-id">{{ log.id }}</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Right: Slide-out Detail Review Drawer -->
+    <div class="details-drawer" [ngClass]="{'drawer-open': drawerOpen()}">
+      <div class="drawer-header">
+        <h2>Log Details</h2>
+        <button mat-icon-button (click)="closeDrawer()" class="close-btn">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="drawer-body" *ngIf="selectedLog() as log">
+        <!-- Headline Block -->
+        <div class="headline-block">
+          <div class="headline-icon" [ngClass]="'status-' + log.status.toLowerCase()">
+            <mat-icon>{{ getIconForCategory(log.category) }}</mat-icon>
+          </div>
+          <span class="detail-id">{{ log.id }}</span>
+          <h3 class="detail-action">{{ log.action }}</h3>
+        </div>
+
+        <!-- Metadata Grid -->
+        <div class="details-metadata-grid">
+          <div class="meta-row">
+            <span class="meta-label">User Initiator</span>
+            <span class="meta-value font-highlight">{{ log.user }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Timestamp</span>
+            <span class="meta-value">{{ log.timestamp }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Category Class</span>
+            <span class="meta-value font-highlight">{{ log.category }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Severity Level</span>
+            <span class="meta-value badge-val" [ngClass]="'badge-' + log.status.toLowerCase()">{{ log.status }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">IP Address</span>
+            <span class="meta-value font-mono">{{ log.ipAddress }}</span>
+          </div>
+        </div>
+
+        <!-- Details Description -->
+        <div class="detail-description-box">
+          <h4>Detailed Event Payload</h4>
+          <p>{{ cleanDetails(log.details) }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

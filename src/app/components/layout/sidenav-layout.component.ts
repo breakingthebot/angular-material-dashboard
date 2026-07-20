@@ -66,7 +66,8 @@ export class SidenavLayoutComponent implements OnInit {
     { path: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
     { path: '/transactions', label: 'Transactions', icon: 'receipt_long' },
     { path: '/analytics', label: 'Analytics', icon: 'bar_chart' },
-    { path: '/settings', label: 'Settings', icon: 'settings' }
+    { path: '/settings', label: 'Settings', icon: 'settings' },
+    { path: '/audit', label: 'Audit Log', icon: 'history' }
   ];
 
   ngOnInit(): void {
