@@ -7,6 +7,7 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { FormsModule } from '@angular/forms';
+import { provideRouter } from '@angular/router';
 import { AuditComponent } from './audit.component';
 import { AuditService } from '../../services/audit.service';
 
@@ -23,6 +24,7 @@ describe('AuditComponent', () => {
       ],
       providers: [
         AuditService,
+        provideRouter([]),
         provideAnimationsAsync()
       ]
     }).compileComponents();

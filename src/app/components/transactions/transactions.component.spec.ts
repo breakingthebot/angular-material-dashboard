@@ -9,6 +9,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { TransactionsComponent } from './transactions.component';
 import { TransactionService, TransactionEntry } from '../../services/transaction.service';
 
+import { provideRouter } from '@angular/router';
+
 describe('TransactionsComponent', () => {
   let component: TransactionsComponent;
   let fixture: ComponentFixture<TransactionsComponent>;
@@ -27,6 +29,7 @@ describe('TransactionsComponent', () => {
       imports: [TransactionsComponent],
       providers: [
         TransactionService,
+        provideRouter([]),
         provideAnimationsAsync()
       ]
     }).compileComponents();
@@ -60,7 +63,7 @@ describe('TransactionsComponent', () => {
 
     const inputElement = fixture.nativeElement.querySelector('.search-field input') as HTMLInputElement;
     inputElement.value = 'Failed';
-    inputElement.dispatchEvent(new Event('keyup'));
+    inputElement.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;

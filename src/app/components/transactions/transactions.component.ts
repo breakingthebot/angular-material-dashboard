@@ -7,6 +7,8 @@
 
 import { Component, OnInit, ViewChild, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // Material Imports
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -27,6 +29,7 @@ import { TransactionService, TransactionEntry } from '../../services/transaction
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
@@ -42,6 +45,8 @@ import { TransactionService, TransactionEntry } from '../../services/transaction
 })
 export class TransactionsComponent implements OnInit {
   private transactionService = inject(TransactionService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   // Table binding data sources
   dataSource = new MatTableDataSource<TransactionEntry>([]);
@@ -49,6 +54,7 @@ export class TransactionsComponent implements OnInit {
 
   // Detail panel drawer state
   selectedTransaction = signal<TransactionEntry | null>(null);
+  filterQuery = signal<string>('');
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -59,6 +65,42 @@ export class TransactionsComponent implements OnInit {
       this.dataSource.data = this.transactionService.transactions();
       if (this.paginator) this.dataSource.paginator = this.paginator;
       if (this.sort) this.dataSource.sort = this.sort;
+    });
+
+    // Sync URL query parameters back into components state on navigation
+    this.route.queryParams.subscribe(params => {
+      if (params['query'] !== undefined) {
+        const queryVal = params['query'] || '';
+        this.filterQuery.set(queryVal);
+        this.dataSource.filter = queryVal.trim().toLowerCase();
+      }
+      if (params['selectedTxId'] !== undefined) {
+        const txId = params['selectedTxId'];
+        if (txId) {
+          const tx = this.transactionService.transactions().find(t => t.id === txId);
+          if (tx) {
+            this.selectedTransaction.set(tx);
+          }
+        } else {
+          this.selectedTransaction.set(null);
+        }
+      }
+    });
+
+    // Write components state updates back into URL query parameters reactively
+    effect(() => {
+      const query = this.filterQuery();
+      const selectedTxId = this.selectedTransaction()?.id || null;
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          query: query || null,
+          selectedTxId: selectedTxId
+        },
+        queryParamsHandling: 'merge',
+        replaceUrl: true
+      });
     });
   }
 
@@ -72,9 +114,9 @@ export class TransactionsComponent implements OnInit {
     };
   }
 
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilterValue(val: string): void {
+    this.filterQuery.set(val);
+    this.dataSource.filter = val.trim().toLowerCase();
     
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
