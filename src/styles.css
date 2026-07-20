@@ -1,4 +1,82 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Stylesheet */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root {
+  --font-family: 'Outfit', sans-serif;
+  
+  /* Light Theme Variables */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-sidebar: #0f172a;
+  --text-sidebar: #94a3b8;
+  --text-sidebar-active: #ffffff;
+  --sidebar-active-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  --sidebar-width-expanded: 260px;
+  --sidebar-width-collapsed: 78px;
+  
+  --border-color: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(226, 232, 240, 0.8);
+  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+  --glass-blur: blur(12px);
+}
+
+.dark-theme {
+  /* Dark Theme Variables */
+  --bg-primary: #090d16;
+  --bg-secondary: #111827;
+  --bg-sidebar: #0b0f19;
+  --text-sidebar: #6b7280;
+  --text-sidebar-active: #38bdf8;
+  --sidebar-active-gradient: rgba(56, 189, 248, 0.08);
+  
+  --border-color: #1f2937;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  
+  --glass-bg: rgba(17, 24, 39, 0.7);
+  --glass-border: rgba(31, 41, 55, 0.8);
+  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow: hidden;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+/* Material overrides for Outfit font family */
+.mat-typography,
+.mat-mdc-card,
+.mat-mdc-button,
+.mat-mdc-table,
+.mat-mdc-paginator,
+.mat-mdc-form-field {
+  font-family: var(--font-family) !important;
+}

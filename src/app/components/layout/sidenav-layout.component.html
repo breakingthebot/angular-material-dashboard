@@ -1,0 +1,93 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Sidebar Navigation Drawer -->
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      [attr.role]="isHandset() ? 'dialog' : 'navigation'"
+      [mode]="isHandset() ? 'over' : 'side'"
+      [opened]="!isHandset()"
+      [ngClass]="{
+        'sidenav-expanded': isExpanded() && !isHandset(),
+        'sidenav-collapsed': !isExpanded() && !isHandset()
+      }">
+    
+    <!-- Sidebar Branding Header -->
+    <div class="sidenav-brand">
+      <div class="brand-logo">
+        <mat-icon class="logo-icon">dashboard</mat-icon>
+      </div>
+      <span class="brand-text">B-Bot Admin</span>
+    </div>
+
+    <!-- Sidenav Profile Detail Box (Only shown in expanded state) -->
+    <div class="sidenav-user" *ngIf="isExpanded() || isHandset()">
+      <div class="user-avatar-wrapper">
+        <img class="user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" alt="User Profile Image">
+        <div class="user-status-indicator"></div>
+      </div>
+      <div class="user-info">
+        <div class="user-name">Sarah Jenkins</div>
+        <div class="user-role">Operations Manager</div>
+      </div>
+    </div>
+
+    <mat-nav-list class="sidenav-list">
+      @for (link of navLinks; track link.path) {
+        <a mat-list-item [routerLink]="link.path" routerLinkActive="active-nav-link" class="nav-item">
+          <mat-icon matListItemIcon class="nav-icon">{{ link.icon }}</mat-icon>
+          <span class="nav-label" *ngIf="isExpanded() || isHandset()">{{ link.label }}</span>
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Sidenav Content Area -->
+  <mat-sidenav-content class="sidenav-content">
+    <!-- Header Navbar Toolbar -->
+    <mat-toolbar class="header-toolbar">
+      <button mat-icon-button (click)="isHandset() ? drawer.toggle() : toggleSidenav()" class="menu-toggle-btn">
+        <mat-icon>menu</mat-icon>
+      </button>
+      
+      <span class="page-title">Enterprise Analytics</span>
+      
+      <span class="toolbar-spacer"></span>
+
+      <!-- Theme Switcher -->
+      <button mat-icon-button (click)="toggleTheme()" class="theme-toggle-btn" [title]="isDarkTheme() ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+        <mat-icon>{{ isDarkTheme() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
+      <!-- User Actions Dropdown Menu Trigger -->
+      <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-menu-trigger">
+        <img class="profile-thumbnail" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" alt="User Thumbnail">
+        <span class="profile-name-text" *ngIf="!isHandset()">Sarah J.</span>
+        <mat-icon class="profile-arrow">arrow_drop_down</mat-icon>
+      </button>
+
+      <!-- Profile Menu definition -->
+      <mat-menu #profileMenu="matMenu" xPosition="before" class="premium-profile-menu">
+        <div class="menu-user-header">
+          <div class="header-name">Sarah Jenkins</div>
+          <div class="header-email">sarah.j&#64;enterprise.com</div>
+        </div>
+        <button mat-menu-item routerLink="/settings">
+          <mat-icon>person</mat-icon>
+          <span>My Profile</span>
+        </button>
+        <button mat-menu-item routerLink="/settings">
+          <mat-icon>settings</mat-icon>
+          <span>Account Settings</span>
+        </button>
+        <hr class="menu-divider">
+        <button mat-menu-item class="menu-logout-btn">
+          <mat-icon class="logout-icon">exit_to_app</mat-icon>
+          <span>Sign Out</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <!-- Main View Outlet Container -->
+    <main class="main-viewport-content">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
