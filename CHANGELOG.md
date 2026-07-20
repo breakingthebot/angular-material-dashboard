@@ -21,3 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Programmed body class toggles supporting Light/Dark visual modes with persistent local storage caching preferences.
 - Added standalone page components (`Dashboard`, `Transactions`, `Analytics`, `Settings`) and configured route bindings.
 - Created unit tests verifying theme state switches and drawer toggle transitions.
+
+## [0.3.0] - 2026-07-20
+
+### Added
+- Created `DashboardService` with signal states managing metric datasets and loading flags.
+- Developed an interactive KPI stats card grid with hover animations, Google Icon support, and responsive grid layouts.
+- Built animated skeleton placeholder cards with keyframe shimmers representing loading latency cycles.
+- Added live synchronization action button with visual spinning animations when executing queries.
+- Added unit specs asserting skeleton shimmers fade out and correct metric values resolve on delayed fetches.
