@@ -1,0 +1,47 @@
+<div class="forbidden-wrapper">
+  <!-- Access Denied Card -->
+  <mat-card class="forbidden-card">
+    <mat-card-content class="forbidden-content">
+      <!-- Shield/Lock icon -->
+      <div class="lock-icon-wrapper">
+        <mat-icon class="lock-icon">lock_person</mat-icon>
+      </div>
+
+      <h1 class="error-title">403</h1>
+      <h2 class="error-subtitle">Access Denied</h2>
+      <p class="error-desc">Your account does not possess the clearance level required to view this segment of the admin panel.</p>
+
+      <!-- Roles Comparison Matrix -->
+      <div class="roles-matrix">
+        <div class="roles-list-box current-roles">
+          <span class="box-title">Your Current Roles</span>
+          @if (currentRoles.length === 0) {
+            <span class="no-roles">None Assigned</span>
+          } @else {
+            <div class="roles-chips-wrap">
+              @for (role of currentRoles; track role) {
+                <span class="role-chip current">{{ role }}</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="roles-list-box required-roles">
+          <span class="box-title">Required Clearances</span>
+          <div class="roles-chips-wrap">
+            <span class="role-chip required">Administrator</span>
+            <span class="role-chip required">Security Officer</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button linking back to settings -->
+      <div class="actions-row">
+        <a mat-flat-button color="primary" routerLink="/settings" class="settings-link-btn">
+          <mat-icon>settings</mat-icon>
+          <span>Modify Access Roles</span>
+        </a>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
