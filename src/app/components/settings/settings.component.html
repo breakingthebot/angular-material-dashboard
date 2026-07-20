@@ -1,0 +1,131 @@
+<div class="settings-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <h1>Settings</h1>
+    <p>Configure personal profiles, system access roles, and alerts triggers.</p>
+  </header>
+
+  <!-- Configuration Form Wrapper -->
+  <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" class="settings-form-layout">
+    <div class="settings-cards-grid">
+      <!-- Left Card: Profile & Access Details -->
+      <mat-card class="settings-card profile-card">
+        <mat-card-content class="card-content-wrapper">
+          <h2 class="section-title">Profile Settings</h2>
+          <p class="section-subtitle">Modify user identification and system access clearances.</p>
+
+          <div class="form-fields-column">
+            <!-- Full Name Input -->
+            <mat-form-field appearance="outline" class="form-field-full">
+              <mat-label>Full Name</mat-label>
+              <input matInput formControlName="profileName" placeholder="Enter your full name">
+              <mat-icon matSuffix class="field-icon">person</mat-icon>
+              <mat-error *ngIf="settingsForm.get('profileName')?.hasError('required')">
+                Name is required
+              </mat-error>
+              <mat-error *ngIf="settingsForm.get('profileName')?.hasError('minlength')">
+                Name must be at least 2 characters
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Email Address Input -->
+            <mat-form-field appearance="outline" class="form-field-full">
+              <mat-label>Email Address</mat-label>
+              <input matInput formControlName="profileEmail" placeholder="Enter your email address">
+              <mat-icon matSuffix class="field-icon">email</mat-icon>
+              <mat-error *ngIf="settingsForm.get('profileEmail')?.hasError('required')">
+                Email address is required
+              </mat-error>
+              <mat-error *ngIf="settingsForm.get('profileEmail')?.hasError('email')">
+                Please enter a valid email address
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Autocomplete Access Roles Chip Grid -->
+            <mat-form-field appearance="outline" class="form-field-full">
+              <mat-label>System Access Roles</mat-label>
+              <mat-chip-grid #chipGrid aria-label="Access role selection">
+                @for (role of selectedRoles(); track role) {
+                  <mat-chip-row (removed)="removeRole(role)" class="custom-chip">
+                    {{ role }}
+                    <button matChipRemove [attr.aria-label]="'remove ' + role">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip-row>
+                }
+                <input placeholder="Add role..."
+                       #roleInput
+                       [formControl]="roleCtrl"
+                       [matChipInputFor]="chipGrid"
+                       [matAutocomplete]="auto"
+                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                       (matChipInputTokenEnd)="addRole($event)" />
+              </mat-chip-grid>
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedRole($event)">
+                @for (role of filteredRoles(); track role) {
+                  <mat-option [value]="role" class="premium-option">{{ role }}</mat-option>
+                }
+              </mat-autocomplete>
+              <mat-icon matSuffix class="field-icon">security</mat-icon>
+              <mat-hint>Choose from available enterprise roles</mat-hint>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Right Card: System Security & Alerts Toggles -->
+      <mat-card class="settings-card system-card">
+        <mat-card-content class="card-content-wrapper">
+          <h2 class="section-title">Security & Notifications</h2>
+          <p class="section-subtitle">Manage triggers for platform logs and system backup frequencies.</p>
+
+          <div class="toggles-column">
+            <!-- Email Alerts Toggle -->
+            <div class="toggle-item-box">
+              <div class="toggle-text-info">
+                <span class="toggle-label">Email Notifications</span>
+                <span class="toggle-desc">Receive real-time transactional invoice status receipts.</span>
+              </div>
+              <mat-slide-toggle formControlName="emailNotifications" color="primary"></mat-slide-toggle>
+            </div>
+
+            <!-- SMS Alerts Toggle -->
+            <div class="toggle-item-box">
+              <div class="toggle-text-info">
+                <span class="toggle-label">SMS Alerts</span>
+                <span class="toggle-desc">Receive text alerts during cluster failovers.</span>
+              </div>
+              <mat-slide-toggle formControlName="smsAlerts" color="primary"></mat-slide-toggle>
+            </div>
+
+            <!-- Database Backups Toggle -->
+            <div class="toggle-item-box">
+              <div class="toggle-text-info">
+                <span class="toggle-label">Automated DB Backups</span>
+                <span class="toggle-desc">Back up system telemetry data every 24 hours.</span>
+              </div>
+              <mat-slide-toggle formControlName="dbBackups" color="primary"></mat-slide-toggle>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Action Buttons Footer -->
+    <div class="form-actions-footer">
+      <button mat-flat-button color="primary" type="submit" [disabled]="settingsForm.invalid || settingsService.saving()" class="save-button">
+        @if (settingsService.saving()) {
+          <ng-container>
+            <span class="spinner-loader"></span>
+            <span>Saving Config...</span>
+          </ng-container>
+        } @else {
+          <ng-container>
+            <mat-icon>save</mat-icon>
+            <span>Save Configuration</span>
+          </ng-container>
+        }
+      </button>
+    </div>
+  </form>
+</div>
