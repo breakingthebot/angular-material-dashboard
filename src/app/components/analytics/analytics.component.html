@@ -1,0 +1,116 @@
+<div class="analytics-container">
+  <!-- Page Header -->
+  <header class="page-header">
+    <h1>Analytics</h1>
+    <p>Perform financial analysis and observe revenue vs operational expenses.</p>
+  </header>
+
+  <!-- Interactive Controls Toolbar -->
+  <div class="controls-toolbar">
+    <!-- Stream Filter Checkboxes -->
+    <div class="legend-checkboxes">
+      <mat-checkbox [checked]="analyticsService.showRevenue()" (change)="toggleStream('revenue')" color="primary" class="check-revenue">
+        <span class="legend-label-color color-revenue"></span>
+        <span class="checkbox-text-label">Revenue</span>
+      </mat-checkbox>
+      <mat-checkbox [checked]="analyticsService.showExpense()" (change)="toggleStream('expense')" color="accent" class="check-expense">
+        <span class="legend-label-color color-expense"></span>
+        <span class="checkbox-text-label">Expenses</span>
+      </mat-checkbox>
+    </div>
+
+    <!-- Time Range selectors -->
+    <mat-button-toggle-group [value]="analyticsService.selectedRange()" (change)="onRangeChange($event.value)" aria-label="Time Range">
+      <mat-button-toggle value="7days">7 Days</mat-button-toggle>
+      <mat-button-toggle value="30days">30 Days</mat-button-toggle>
+      <mat-button-toggle value="12months">12 Months</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <!-- Main Chart Card -->
+  <mat-card class="chart-card">
+    <mat-card-content class="chart-card-content">
+      <!-- Responsive SVG Line Chart -->
+      <div class="svg-wrapper">
+        <svg [attr.viewBox]="'0 0 ' + width + ' ' + height" class="chart-svg" (mouseleave)="clearHover()">
+          <!-- Grid Y-axis guides -->
+          <g class="grid-lines-group">
+            @for (tick of chartPoints().gridY; track tick.y) {
+              <line [attr.x1]="paddingLeft" [attr.y1]="tick.y" [attr.x2]="width - paddingRight" [attr.y2]="tick.y" class="grid-line"></line>
+              <text [attr.x]="paddingLeft - 10" [attr.y]="tick.y + 4" class="y-tick-label">{{ tick.label }}</text>
+            }
+          </g>
+
+          <!-- X-axis baseline -->
+          <line [attr.x1]="paddingLeft" [attr.y1]="height - paddingBottom" [attr.x2]="width - paddingRight" [attr.y2]="height - paddingBottom" class="axis-line"></line>
+
+          <!-- X-axis Labels -->
+          <g class="x-labels-group">
+            @for (p of chartPoints().revenue; track p.label) {
+              <text [attr.x]="p.x" [attr.y]="height - 20" class="x-tick-label">{{ p.label }}</text>
+            }
+          </g>
+
+          <!-- Revenue Polyline Connection -->
+          @if (analyticsService.showRevenue()) {
+            <polyline [attr.points]="revenuePolyline()" class="chart-polyline line-revenue"></polyline>
+          }
+
+          <!-- Expenses Polyline Connection -->
+          @if (analyticsService.showExpense()) {
+            <polyline [attr.points]="expensePolyline()" class="chart-polyline line-expense"></polyline>
+          }
+
+          <!-- Interactive Revenue Node circles -->
+          @if (analyticsService.showRevenue()) {
+            <g class="nodes-group">
+              @for (p of chartPoints().revenue; track p.x) {
+                <circle [attr.cx]="p.x" [attr.cy]="p.y" r="5" class="node-dot dot-revenue"
+                        (mouseenter)="setHoverPoint(p, 'Revenue')"></circle>
+              }
+            </g>
+          }
+
+          <!-- Interactive Expense Node circles -->
+          @if (analyticsService.showExpense()) {
+            <g class="nodes-group">
+              @for (p of chartPoints().expense; track p.x) {
+                <circle [attr.cx]="p.x" [attr.cy]="p.y" r="5" class="node-dot dot-expense"
+                        (mouseenter)="setHoverPoint(p, 'Expense')"></circle>
+              }
+            </g>
+          }
+
+          <!-- Custom Inline SVG Tooltip Drawer -->
+          @if (hoveredPoint()) {
+            <g class="svg-tooltip" [attr.transform]="'translate(' + hoveredPoint()!.x + ',' + hoveredPoint()!.y + ')'">
+              <rect x="-65" y="-55" width="130" height="42" rx="8" class="tooltip-bg"></rect>
+              <text x="0" y="-40" class="tooltip-title">{{ hoveredPoint()!.label }}</text>
+              <text x="0" y="-24" class="tooltip-value">
+                {{ hoveredPoint()!.type }}: {{ hoveredPoint()!.value | currency:'USD':'symbol':'1.0-0' }}
+              </text>
+            </g>
+          }
+        </svg>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Summary Cards underneath -->
+  <div class="summary-cards-row">
+    <mat-card class="stat-summary-card">
+      <mat-card-content>
+        <span class="summary-title">Operating Margin</span>
+        <span class="summary-val">34.2%</span>
+        <span class="summary-desc">Percentage of revenue left after paying operational costs.</span>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-summary-card">
+      <mat-card-content>
+        <span class="summary-title">Monthly EBITDA</span>
+        <span class="summary-val">$18,420</span>
+        <span class="summary-desc">Earnings before interest, taxes, depreciation, and amortization.</span>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
